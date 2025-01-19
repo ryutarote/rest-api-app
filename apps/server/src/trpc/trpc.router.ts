@@ -25,7 +25,7 @@ export class TrpcRouter {
 
   async applyMiddleware(app: INestApplication) {
     app.use(
-      `/trpc`,
+      '/trpc',
       trpcExpress.createExpressMiddleware({
         router: this.appRouter,
         createContext,
@@ -34,4 +34,4 @@ export class TrpcRouter {
   }
 }
 
-export type AppRouter = TrpcRouter[`appRouter`];
+export type AppRouter = TrpcRouter['appRouter'];
