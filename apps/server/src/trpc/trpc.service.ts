@@ -8,16 +8,15 @@ import * as trpcExpress from '@trpc/server/adapters/express';
 import { CreateExpressContextOptions } from '@trpc/server/adapters/express';
 
 export interface TrpcContext extends CreateExpressContextOptions {
-  user: UserById;
+  user?: UserById;
 }
 
 export const createContext = async (
   opts: trpcExpress.CreateExpressContextOptions,
-): Promise<TrpcContext> => {
+) => {
   return {
     req: opts.req,
     res: opts.res,
-    user: {} as UserById, // Add a default or mock user object here
   };
 };
 
@@ -38,9 +37,7 @@ export class TrpcService {
   // these routes requires authentication:
   // if allowedRoles is empty, it requires an authenticated user (access token in the header)
   // if allowedRoles is not empty, it requires an authenticated user with one of the allowed roles
-  protectedProcedure(
-    allowedRoles?: string[],
-  ): ReturnType<typeof this.trpc.procedure.use> {
+  protectedProcedure(allowedRoles?: string[]) {
     const procedure = this.trpc.procedure.use(async (opts) => {
       // get bearer from headers
       const userJwt = await this.getJwtUserFromHeader(opts.ctx);
